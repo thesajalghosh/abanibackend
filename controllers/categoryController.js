@@ -139,4 +139,5 @@ const categoryDeleteController = async (req, res) => {
 
 module.exports = {
   createCategoryController,
+  categoryController
 };

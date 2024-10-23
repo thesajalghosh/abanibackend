@@ -1,6 +1,6 @@
 const express = require("express");
 const { requireSignIn, isAdmin } = require("../middlewares/authMiddlewares");
-const {createCategoryController} = require("../controllers/categoryController")
+const {createCategoryController, categoryController} = require("../controllers/categoryController")
 const multer = require("multer");
 const path = require("path");
 
@@ -28,6 +28,7 @@ router.post(
   upload.single("photo"),
   createCategoryController
 );
+router.get("/get-all-category", categoryController)
 
 
 
