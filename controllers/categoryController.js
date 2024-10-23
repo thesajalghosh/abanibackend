@@ -139,9 +139,4 @@ const categoryDeleteController = async (req, res) => {
 
 module.exports = {
   createCategoryController,
-  updateCategoryController,
-  categoryController,
-  singleCategoryController,
-  categoryDeleteController,
-  getCategoryPhotoController,
 };
