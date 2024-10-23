@@ -1,7 +1,6 @@
 const slugify = require("slugify");
 const productModel = require("../models/productModel");
 const fs = require("fs");
-const { categoryController } = require("./CategoryController");
 const categoryModel = require("../models/categoryModel");
 const { uploadingImage } = require("../helpers/uploadingImage");
 
