@@ -41,46 +41,38 @@ module.exports = registerController;
 const loginController = async (req, res) => {
     try {
         const { email, password, role } = req.body;
-        console.log("Login request body:", req.body);
+        // console.log("Login request body:", req.body);
 
+        // Validate email and password
         if (!email || !password) {
-            return res.status(400).send({
-                success: false,
-                message: "Email and password are required",
-            });
+            throw new Error("Email and password are required");
         }
 
+        // Find user by email
         const user = await userModel.findOne({ email });
         if (!user) {
-            return res.status(404).send({
-                success: false,
-                message: "Email is not registered",
-            });
+            throw new Error("Email is not registered");
         }
 
         // Check password
         const match = await comparePassword(password, user.password);
         if (!match) {
-            return res.status(401).send({
-                success: false,
-                message: "Incorrect password",
-            });
+            throw new Error("Incorrect password");
         }
 
-        // If role is provided, check role
+        // Check role if provided
         if (role && user.role !== Number(role)) {
-            return res.status(403).send({
-                success: false,
-                message: "Role does not match",
-            });
+            throw new Error("Role does not match");
         }
 
-        console.log(process.env.JWT_SECRET)
+        // Generate JWT token
+        console.log(process.env.JWT_SECRET);
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
             expiresIn: "7d",
         });
 
-        res.status(200).send({
+        // Return success response
+        return res.status(200).send({
             success: true,
             message: "Successfully logged in",
             user: {
@@ -92,15 +84,18 @@ const loginController = async (req, res) => {
             },
             token,
         });
+
     } catch (error) {
+        // Handle all errors here
         console.error("Login Error:", error);
-        res.status(500).send({
+        return res.status(500).send({
             success: false,
-            message: "Error in login",
+            message: error.message || "Error in login",
             error: error.message,
         });
     }
 };
+
 
 
 
