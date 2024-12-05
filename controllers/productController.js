@@ -3,6 +3,8 @@ const productModel = require("../models/productModel");
 const fs = require("fs");
 const categoryModel = require("../models/categoryModel");
 const { uploadingImage } = require("../helpers/uploadingImage");
+const popularProductModel = require("../models/popularProductModel");
+const mongoose = require("mongoose");
 
 const createProductController = async (req, res) => {
   try {
@@ -348,6 +350,81 @@ const CategoryWiseProduct = async (req, res) => {
   }
 };
 
+const addPopularProductController = async (req, res) => {
+
+  try {
+    const { productIds } = req.body
+
+    // const add_popular_product = await popularProductModel
+
+    const popularProducts = productIds.map((id) => ({
+      product: new mongoose.Types.ObjectId(id),
+    }));
+
+    const update_popular_product = await popularProductModel.insertMany(popularProducts)
+
+    console.log(update_popular_product)
+
+    return res.status(200).send({
+      success: false,
+      message: "succefully mark products is popular",
+
+    })
+
+  } catch (error) {
+
+    return res.status(400).send({
+      success: false,
+      message: "error in popular product controller",
+      error,
+    })
+  }
+
+}
+
+const getAllPopularProductController = async (req, res) => {
+  try {
+    const all_popular_product = await popularProductModel.find({}).populate("product")
+
+    res.status(200).send({
+      success: true,
+      message: "successfully get all popular product",
+      all_popular_product
+    })
+
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: "error in get all popular product controller",
+      error,
+    })
+  }
+
+
+}
+
+const deletePopulerProductController = async (req, res) => {
+  try {
+    const { id } = req.params
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      await popularProductModel.findByIdAndDelete(id)
+    }
+
+    return res.status(200).send({
+     success: true,
+     message: "successfully delete" 
+    })
+
+  } catch (error) {
+    return res.status(400).send({
+      success: false,
+      message: "error in get all popular product controller",
+      error,
+    })
+  }
+
+}
+
 module.exports = {
   createProductController,
   getProductController,
@@ -362,4 +439,7 @@ module.exports = {
   reletedProduct,
   CategoryWiseProduct,
   categoryProduct,
+  addPopularProductController,
+  getAllPopularProductController,
+  deletePopulerProductController,
 };

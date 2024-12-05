@@ -90,11 +90,12 @@ const verifyPaymentController = async (req, res) => {
 const getAllOrdersController = async (req, res) => {
   try {
     // Fetch all orders from the database
-    const orders = await Orders.find().populate('user').populate('items.product');
+    const orders = await Orders.find({}).populate("user").populate("items.product");
 
     // Respond with the orders
     return res.status(200).json({
       success: true,
+      message: "getting all orders successfully",
       orders,
     });
   } catch (error) {
@@ -136,9 +137,39 @@ const getUserOrdersController = async (req, res) => {
   }
 };
 
+const updateOrderStatusController = async (req, res)=>{
+  try {
+    const {id} = req.params;
+    const {status} = req.body;
+    const update_status_data = await Orders.findByIdAndUpdate(
+      id,
+      {$set : {orderStatus : status}},
+      {new : true}
+    )
+
+
+    return res.status(200).json({
+      success: true,
+      message: "in order status update successfully",
+      update_status_data,
+    });
+    
+  } catch (error) {
+    console.error('Error fetching user orders:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Error in update status orders',
+      error,
+    });
+  }
+}
+
+
+
 module.exports = {
     createOrderController,
     verifyPaymentController,
     getAllOrdersController,
     getUserOrdersController,
+    updateOrderStatusController,
 }

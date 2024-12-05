@@ -13,6 +13,9 @@ const {
   searchProductController,
   reletedProduct,
   categoryProduct,
+  addPopularProductController,
+  getAllPopularProductController,
+  deletePopulerProductController,
 } = require("../controllers/productController");
 const multer = require("multer");
 
@@ -75,5 +78,13 @@ router.get("/category-product/:cid", categoryProduct);
 
 // category wise product
 router.get("/product-catagory/:id");
+
+// this route for making some product popular
+
+router.post("/mark-popular-product", addPopularProductController)
+
+router.get("/all-popular-product", getAllPopularProductController)
+
+router.delete("/delete-mark-element/:id", deletePopulerProductController)
 
 module.exports = router;

@@ -2,7 +2,9 @@ const express = require("express");
 const {
   createOrderController,
   verifyPaymentController,
-  getUserOrdersController
+  getUserOrdersController,
+  getAllOrdersController,
+  updateOrderStatusController,
 } = require("../controllers/orderController");
 const { requireSignIn } = require("../middlewares/authMiddlewares");
 
@@ -11,6 +13,12 @@ const router = express.Router();
 router.post("/create-order", createOrderController)
 router.post("/verify-payment", verifyPaymentController)
 router.get("/get-single-user-order/:userId", getUserOrdersController)
+
+router.get("/get-all-orders", getAllOrdersController)
+
+router.put("/update-order-status/:id", updateOrderStatusController)
+
+
 
 // router.post("/order-place", requireSignIn, orderPlaceController);
 
