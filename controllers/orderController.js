@@ -48,6 +48,8 @@ const verifyPaymentController = async (req, res) => {
       .digest('hex');
 
     // Compare the generated signature with the received signature
+    console.log("generatedSignature", generatedSignature, signature)
+    
     if (generatedSignature === signature) {
       // Signature is valid, save order to database
 
