@@ -4,8 +4,8 @@ const Orders = require('../models/orderModel'); // Import the Order model
 
 // This razorpayInstance will be used to access any resource from razorpay
 const razorpayInstance = new Razorpay({
-    key_id: "rzp_test_ITd0ay3uQINZWj",  // Replace with your key_id
-    key_secret: "2RjKFnH3qXC4QGoZLnk4ulof"  // Replace with your key_secret
+    key_id: process.env.RAZORPAY_KEY,  // Replace with your key_id
+    key_secret: process.env.RAZORPAY_KEY_SECRET  // Replace with your key_secret
 });
 
 const createOrderController = async (req, res) => {
@@ -20,6 +20,8 @@ const createOrderController = async (req, res) => {
             (err, order) => {
                 // STEP 3 & 4: 
                 if (!err) {
+
+                  console.log("order", order)
                     return res.json(order);
                 } else {
                     return res.status(500).send(err);
