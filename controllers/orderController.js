@@ -10,7 +10,7 @@ const razorpayInstance = new Razorpay({
 
 const createOrderController = async (req, res) => {
     try {
-        console.log(req.body);
+      
 
         // STEP 1:
         const { amount, currency, receipt, notes } = req.body;      
@@ -21,7 +21,7 @@ const createOrderController = async (req, res) => {
                 // STEP 3 & 4: 
                 if (!err) {
 
-                  console.log("order", order)
+             
                     return res.json(order);
                 } else {
                     return res.status(500).send(err);
@@ -30,7 +30,7 @@ const createOrderController = async (req, res) => {
         );
 
     } catch (error) {
-        console.log(error);
+        
         return res.status(500).send({
             success: false,
             error,
@@ -41,7 +41,7 @@ const createOrderController = async (req, res) => {
 const verifyPaymentController = async (req, res) => {
   try {
     const { order_id, payment_id, signature, user, items, address, bookingDate, timeSlot, paymentMode } = req.body;
-    console.log(req.body)
+   
 
     // Generate the signature from the received data
     const generatedSignature = crypto
@@ -50,7 +50,7 @@ const verifyPaymentController = async (req, res) => {
       .digest('hex');
 
     // Compare the generated signature with the received signature
-    console.log("generatedSignature", generatedSignature, signature)
+ 
     
     if (generatedSignature === signature) {
       // Signature is valid, save order to database
@@ -87,7 +87,7 @@ const verifyPaymentController = async (req, res) => {
       return res.status(400).json({ message: 'Payment verification failed' });
     }
   } catch (error) {
-    console.error('Error verifying payment:', error);
+   
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -103,7 +103,7 @@ const getAllOrdersController = async (req, res) => {
       orders,
     });
   } catch (error) {
-    console.error('Error fetching orders:', error);
+
     return res.status(500).json({
       success: false,
       message: 'Error in fetching orders',
@@ -132,7 +132,7 @@ const getUserOrdersController = async (req, res) => {
       orders,
     });
   } catch (error) {
-    console.error('Error fetching user orders:', error);
+   
     return res.status(500).json({
       success: false,
       message: 'Error in fetching user orders',
@@ -159,7 +159,7 @@ const updateOrderStatusController = async (req, res)=>{
     });
     
   } catch (error) {
-    console.error('Error fetching user orders:', error);
+
     return res.status(500).json({
       success: false,
       message: 'Error in update status orders',

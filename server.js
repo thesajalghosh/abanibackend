@@ -20,11 +20,14 @@ app.use(express.urlencoded({ extended: true }));
 // Connect to database
 connectDB();
 
+console.log("process.env.RAZORPAY_KEY", process.env.RAZORPAY_KEY)
+
 // Routes
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/category", categoryroute);
 app.use("/api/v1/product", productRoute);
 app.use("/api/v1/order", orderRoute)
+app.get("/api/v1/razorpay-key", (req, res)=>res.json({key: process.env.RAZORPAY_KEY}))
 
 
 app.get("/", (req, res) => {
