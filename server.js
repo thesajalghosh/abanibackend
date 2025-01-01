@@ -20,7 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 // Connect to database
 connectDB();
 
-console.log("process.env.RAZORPAY_KEY", process.env.RAZORPAY_KEY)
 
 // Routes
 app.use("/api/v1/auth", authRoute);
@@ -33,7 +32,7 @@ app.get("/api/v1/razorpay-key", (req, res)=>res.json({key: process.env.RAZORPAY_
 app.get("/", (req, res) => {
     res.send("<h1>Welcome to the hair service app</h1>");
 });
-console.log("sajal",process.env.PORT)
+
 // Define the port
 const PORT = process.env.PORT || 4000;
 

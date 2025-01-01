@@ -97,9 +97,77 @@ const loginController = async (req, res) => {
 };
 
 
+const checkUserExistController = async(req,res)=>{
+    try {
+        const {phone} = req.body
+        const user = await userModel.findOne({phone})
+        console.log("user", user)
+        let token="";
+        if(user){
+            token = jwt.sign({ _id: phone }, process.env.JWT_SECRET, {
+                expiresIn: "7d",
+            });
+        }
+        if(!user){
+            return res.status(200).send({
+                success: true,
+                message: "user not found",
+                userExist:false
+               
+            });
+        }else {
+            return res.status(200).send({
+                success: true,
+                message: "user found",
+                userExist:true,
+                user,
+                token
+               
+            });
+        }
+        
+    } catch (error) {
+       
+        return res.status(500).send({
+            success: false,
+            message: error.message || "Error in user find",
+            error: error.message,
+        });
+    }
+}
+
+const createAccountController = async(req, res)=>{
+try {
+    const {phone, name} = req.body
+    token = jwt.sign({ _id: phone}, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+    });
+    const newUser = new userModel({phone, name})
+
+    await newUser.save()
+
+    return res.status(200).send({
+        success: true,
+        message: "Account created successfully",
+       user: newUser,
+       token
+    });
+    
+} catch (error) {
+    return res.status(500).send({
+        success: false,
+        message: error.message || "Error in user find",
+        error: error.message,
+    });
+}
+}
+
+
 
 
  module.exports = {
      registerController,
-     loginController
+     loginController,
+     checkUserExistController,
+     createAccountController
  }

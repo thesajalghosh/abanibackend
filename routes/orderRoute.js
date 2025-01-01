@@ -5,12 +5,14 @@ const {
   getUserOrdersController,
   getAllOrdersController,
   updateOrderStatusController,
+  createOrderCashPaymentController,
 } = require("../controllers/orderController");
 const { requireSignIn } = require("../middlewares/authMiddlewares");
 
 const router = express.Router();
 
 router.post("/create-order", createOrderController)
+router.post("/create-cash-order", createOrderCashPaymentController)
 router.post("/verify-payment", verifyPaymentController)
 router.get("/get-single-user-order/:userId", getUserOrdersController)
 
