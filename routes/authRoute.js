@@ -1,5 +1,5 @@
 const express = require("express");
-const { registerController, loginController, checkUserExistController, createAccountController } = require("../controllers/authController");
+const { registerController, checkUserExistController, createAccountController, adminLoginController } = require("../controllers/authController");
 
 
 const authRouter = express.Router();
@@ -7,7 +7,7 @@ const authRouter = express.Router();
 
 authRouter.post("/register", registerController)
 
-authRouter.post("/login", loginController)
+authRouter.post("/admin-login", adminLoginController)
 
 authRouter.post("/check-user", checkUserExistController);
 authRouter.post("/create-account", createAccountController);

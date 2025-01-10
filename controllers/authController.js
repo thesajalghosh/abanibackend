@@ -38,27 +38,24 @@ const registerController = async (req, res) => {
 module.exports = registerController;
 
 
-const loginController = async (req, res) => {
+const adminLoginController = async (req, res) => {
     try {
-        const { email, password, role } = req.body;
-        // console.log("Login request body:", req.body);
+        const { name, phone, role } = req.body;
 
-        // Validate email and password
-        if (!email || !password) {
-            throw new Error("Email and password are required");
+
+        if (!name || !phone || !role) {
+            throw new Error("name and phone and role are required");
         }
 
-        // Find user by email
-        const user = await userModel.findOne({ email });
+        // Find user by phone
+        const user = await userModel.findOne({ phone });
         if (!user) {
-            throw new Error("Email is not registered");
+            throw new Error("phone is not registered");
         }
 
-        // Check password
-        const match = await comparePassword(password, user.password);
-        if (!match) {
-            throw new Error("Incorrect password");
-        }
+       if(user.name !== name){
+        throw new Error("name does not match");
+       }
 
         // Check role if provided
         if (role && user.role !== Number(role)) {
@@ -68,7 +65,7 @@ const loginController = async (req, res) => {
         // Generate JWT token
         console.log(process.env.JWT_SECRET);
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-            expiresIn: "7d",
+            expiresIn: "90d",
         });
 
         // Return success response
@@ -78,7 +75,6 @@ const loginController = async (req, res) => {
             user: {
                 id: user._id,
                 name: user.name,
-                email: user.email,
                 phone: user.phone,
                 role: user.role, // Include role in the response
             },
@@ -167,7 +163,7 @@ try {
 
  module.exports = {
      registerController,
-     loginController,
+     adminLoginController,
      checkUserExistController,
      createAccountController
  }
