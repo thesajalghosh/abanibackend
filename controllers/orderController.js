@@ -39,8 +39,13 @@ const createOrderController = async (req, res) => {
   }
 }
 const verifyPaymentController = async (req, res) => {
+
   try {
+    console.log("cal................")
     const { order_id, payment_id, signature, user, items, address, bookingDate, timeSlot, paymentMode } = req.body;
+
+    console.log("req,body", items)
+    console.log("user", user)
 
 
     // Generate the signature from the received data
@@ -51,13 +56,13 @@ const verifyPaymentController = async (req, res) => {
 
     // Compare the generated signature with the received signature
 
-
+    console.log("generatedSignature", generatedSignature, signature)
     if (generatedSignature === signature) {
       // Signature is valid, save order to database
 
       // Calculate the total price from the items
       const totalPrice = items.reduce((total, item) => total + item.price * item.buyqun, 0);
-
+      console.log("totalPrice", totalPrice)
       const newOrder = new Orders({
         user: user, // Assuming `user` contains user data
         items: items.map(item => ({
@@ -78,16 +83,28 @@ const verifyPaymentController = async (req, res) => {
         paymentMode: paymentMode,
         paymentStatus: 'completed', // Payment is successful
       });
-
-      await newOrder.save();
-
-      return res.status(200).json({ message: 'Payment verification and order saving successful', order: newOrder });
+      console.log("newOrder", newOrder)
+      //     const result =  await newOrder.save();
+      // console.log("calll333333333333333333333", result)
+      //       return res.status(200).json({ message: 'Payment verification and order saving successful', order: newOrder });
+      try {
+        const savedOrder = await newOrder.save();
+        console.log("calll.......", savedOrder)
+        return res.status(200).json({ 
+          message: 'Payment verification and order saving successful',
+           order: savedOrder ,
+           items:items,
+          });
+      } catch (saveError) {
+        console.error("Error saving order:", saveError); // Log the error
+        return res.status(500).json({ message: 'Error saving order', error: saveError.message });
+      }
     } else {
       // Signature is invalid, respond with error
       return res.status(400).json({ message: 'Payment verification failed' });
     }
   } catch (error) {
-
+    console.log("callll 2222222222222")
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
@@ -169,7 +186,7 @@ const updateOrderStatusController = async (req, res) => {
 }
 
 const createOrderCashPaymentController = async (req, res) => {
-console.log("req.body", req.body)
+  console.log("req.body", req.body)
   try {
     const { user, items, address, bookingDate, timeSlot, paymentMode } = req.body;
 
@@ -205,7 +222,7 @@ console.log("req.body", req.body)
     res.status(200).send({
       message: "successfully create cash order",
       success: true,
-      order:{order : newOrder, items: items}
+      order: { order: newOrder, items: items }
     })
 
   } catch (error) {
